@@ -1,0 +1,31 @@
+{
+  "id": "/grafana-dcos",
+  "cpus": 1,
+  "mem": 256,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "brndnmtthws/grafana-dcos",
+      "network": "BRIDGE",
+      "portMappings": [{
+              "containerPort": 3000,
+              "hostPort": 0,
+              "servicePort": 10000
+      }]
+    }
+  },
+  "cmd":"gosu grafana /usr/sbin/grafana-server --homepath=/usr/share/grafana --config=/etc/grafana/grafana.ini",
+  "healthChecks": [{
+      "protocol": "HTTP",
+      "path": "/",
+      "gracePeriodSeconds": 60,
+      "intervalSeconds": 10,
+      "portIndex": 0,
+      "timeoutSeconds": 10,
+      "maxConsecutiveFailures": 2
+  }],
+  "labels": {
+    "HAPROXY_GROUP": "external"
+  }
+}
